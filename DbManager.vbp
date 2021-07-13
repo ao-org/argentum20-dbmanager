@@ -1,9 +1,11 @@
 Type=Exe
-Form=Codigo\frmMain.frm
 Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#C:\Windows\SysWOW64\stdole2.tlb#OLE Automation
+Reference=*\G{B691E011-1797-432E-907A-4D8C69339129}#6.1#0#C:\Program Files (x86)\Common Files\System\ado\msado15.dll#Microsoft ActiveX Data Objects 6.1 Library
 Object={248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0; MSWINSCK.ocx
+Form=Codigo\frmMain.frm
 Module=Extra; Codigo\Extra.bas
 Class=cStringBuilder; Codigo\cStringBuilder.cls
+Module=Database; Codigo\Database.bas
 IconForm="frmMain"
 Startup="frmMain"
 HelpFile=""

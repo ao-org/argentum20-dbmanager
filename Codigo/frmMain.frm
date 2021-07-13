@@ -1,14 +1,16 @@
 VERSION 5.00
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "MSWINSCK.ocx"
 Begin VB.Form frmMain 
-   Caption         =   "Form1"
-   ClientHeight    =   3135
-   ClientLeft      =   60
-   ClientTop       =   405
-   ClientWidth     =   4680
+   BorderStyle     =   0  'None
+   Caption         =   "DbManager"
+   ClientHeight    =   1935
+   ClientLeft      =   0
+   ClientTop       =   0
+   ClientWidth     =   3450
    LinkTopic       =   "Form1"
-   ScaleHeight     =   3135
-   ScaleWidth      =   4680
+   ScaleHeight     =   1935
+   ScaleWidth      =   3450
+   ShowInTaskbar   =   0   'False
    StartUpPosition =   3  'Windows Default
    Begin MSWinsockLib.Winsock MainSocket 
       Left            =   120
@@ -28,6 +30,9 @@ Option Explicit
 Private DataBuffer As cStringBuilder
 
 Private Sub Form_Load()
+
+    Database_Connect
+
     Dim Puerto As Integer
     Puerto = Val(GetVar(App.Path & "\..\re20-server\Server.ini", "DBMANAGER", "PUERTO"))
 
@@ -37,7 +42,12 @@ Private Sub Form_Load()
 End Sub
 
 Private Sub MainSocket_Close()
+    Database_Close
     End
+End Sub
+
+Private Sub MainSocket_Connect()
+    Debug.Print "Conectado"
 End Sub
 
 Private Sub MainSocket_DataArrival(ByVal bytesTotal As Long)
@@ -53,9 +63,10 @@ Private Sub MainSocket_DataArrival(ByVal bytesTotal As Long)
         Separator = DataBuffer.Find(Chr(0))
         
         If Separator > 0 Then
-            Packet = DataBuffer.SubStr(0, Separator)
+            Packet = DataBuffer.SubStr(0, Separator - 1)
 
             Debug.Print Packet
+            Call ProcessPacket(Packet)
 
             Call DataBuffer.Remove(0, Separator)
         End If
@@ -64,3 +75,16 @@ Private Sub MainSocket_DataArrival(ByVal bytesTotal As Long)
     
 End Sub
 
+Private Sub ProcessPacket(Packet As String)
+    Dim FirstSeparator As Long
+    FirstSeparator = InStr(1, Packet, Chr(1))
+
+    Dim Query As String
+    Query = Left$(Packet, FirstSeparator - 1)
+
+    Dim Params() As String
+    Params = Split(Right$(Packet, Len(Packet) - FirstSeparator), Chr(1))
+
+    Call MakeQuery(Query, True, Params)
+
+End Sub
