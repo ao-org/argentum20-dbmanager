@@ -93,7 +93,7 @@ ErrorHandler:
 
 End Sub
 
-Public Function MakeQuery(Query As String, ByVal NoResult As Boolean, Query_Parameters() As String) As Boolean
+Public Function MakeQuery(Query As String, ByVal NoResult As Boolean, ParamArray Query_Parameters() As Variant) As Boolean
         ' 17/10/2020 Autor: Alexis Caraballo (WyroX)
         ' Hace una unica query a la db. Asume una conexion.
         ' Si NoResult = False, el metodo lee el resultado de la query
@@ -117,12 +117,11 @@ Public Function MakeQuery(Query As String, ByVal NoResult As Boolean, Query_Para
 114             Params = Null
             
             Else
-                ReDim Params(UBound(Query_Parameters)) As Variant
+                Params = Query_Parameters
                 
-                Dim i As Integer
-                For i = 0 To UBound(Params)
-116                 Params(i) = Query_Parameters(i)
-                Next
+                If IsArray(Query_Parameters(0)) Then
+122                 Params = Query_Parameters(0)
+                End If
 
                 .Prepared = True
             End If

@@ -76,15 +76,29 @@ Private Sub MainSocket_DataArrival(ByVal bytesTotal As Long)
 End Sub
 
 Private Sub ProcessPacket(Packet As String)
+    On Error Resume Next
+
     Dim FirstSeparator As Long
     FirstSeparator = InStr(1, Packet, Chr(1))
 
-    Dim Query As String
-    Query = Left$(Packet, FirstSeparator - 1)
-
-    Dim Params() As String
-    Params = Split(Right$(Packet, Len(Packet) - FirstSeparator), Chr(1))
-
-    Call MakeQuery(Query, True, Params)
+    If FirstSeparator > 0 Then
+        Dim Query As String
+        Query = Left$(Packet, FirstSeparator - 1)
+    
+        Dim Fields() As String
+        Fields = Split(Right$(Packet, Len(Packet) - FirstSeparator), Chr(1))
+    
+        Dim Params() As Variant
+        ReDim Params(UBound(Fields))
+        
+        Dim i As Integer
+        For i = 0 To UBound(Fields)
+            Params(i) = Fields(i)
+        Next
+    
+        Call MakeQuery(Query, True, Params)
+    Else
+        Call MakeQuery(Packet, True)
+    End If
 
 End Sub
