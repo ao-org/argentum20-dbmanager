@@ -19,6 +19,14 @@ Begin VB.Form frmMain
       _ExtentY        =   741
       _Version        =   393216
    End
+   Begin VB.Label Label1 
+      Caption         =   "<Inserte información útil aquí>"
+      Height          =   375
+      Left            =   600
+      TabIndex        =   0
+      Top             =   840
+      Width           =   2295
+   End
 End
 Attribute VB_Name = "frmMain"
 Attribute VB_GlobalNameSpace = False

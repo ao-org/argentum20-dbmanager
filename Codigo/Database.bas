@@ -59,10 +59,10 @@ Public Sub Database_Connect()
         Exit Sub
     
 ErrorHandler:
-116     'Call LogDatabaseError("Database Error: " & Err.Number & " - " & Err.Description)
+116     Call LogDatabaseError("Database Error: " & Err.Number & " - " & Err.Description)
     
 118     If Not ConnectedOnce Then
-120         Call MsgBox("No se pudo conectar a la base de datos. Mas información en logs/Database.log", vbCritical, "OBDC - Error")
+120         Call MsgBox("No se pudo conectar a la base de datos. Mas información en Errores.log", vbCritical, "OBDC - Error")
 122         End
         End If
 
@@ -154,11 +154,7 @@ ErrorHandler:
 144         Resume
         
         Else
-146         'Call LogDatabaseError("Error en MakeQuery: query = '" & query & "'. " & errNumber & " - " & ErrDesc)
-        
-            On Error GoTo 0
-
-148         Err.Raise errNumber, "MakeQuery", ErrDesc
+146         Call LogDatabaseError("Query = '" & Query & "'. " & errNumber & " - " & ErrDesc)
 
         End If
 
